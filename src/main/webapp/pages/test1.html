@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test1</title>
+</head>
+<body>
+
+<div id="app">
+    11111111111111111
+    <el-button type="primary" @click="jump">确定</el-button>
+</div>
+</body>
+
+<!-- 引入组件库 -->
+
+<script src="../js/vue.js"></script>
+
+<script src="../plugins/elementui/index.js"></script>
+
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    var app = new Vue({
+        el:'#app',
+        data:{
+
+        },
+
+        methods:{
+            jump(){
+                this.router.push('/test2.html');
+            },
+        },
+    })
+</script>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <title>文章</title>
+
+    <!-- 引入样式 -->
+
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div id="app">
+    <el-header>
+        <div id="header">
+            <div id="h_left">
+                <img src="../img/Microsoft.png">
+            </div>
+            <div id="h_right">
+                <el-button-group>
+                    <el-button type="primary">登录</el-button>
+                    <el-button type="primary">注册</el-button>
+                    <el-button type="primary">个人中心</el-button>
+                </el-button-group>
+            </div>
+        </div>
+    </el-header>
+    <header>
+
+
+        <el-menu
+                :default-active="activeIndex2"
+                class="el-menu-demo"
+                mode="horizontal"
+                @select="handleSelect"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b">
+            <el-menu-item index="1">
+                <div>
+                    <img src="../img/Microsoft2.png" @click="mainPage">
+                </div>
+            </el-menu-item>
+            <el-menu-item index="2"><a href="../pages/article.html" target="_self">文章</a></el-menu-item>
+        </el-menu>
+
+
+    </header>
+
+    <el-main>
+        <div class="app-container">
+            <div class="box">
+                <div class="filter-container">
+
+                    <el-input placeholder="链接名" v-model="pagination.queryString" style="width: 200px;"></el-input>
+
+                    <el-button type="primary" icon="el-icon-search" circle @click="getAll()" class="dalfBut" title="查询"></el-button>
+
+                </div>
+
+                <el-table size="small" :data="artTable" stripe highlight-current-row style="width: 100%">
+                    <el-table-column prop="art_title" label="文章标题" align="center"></el-table-column>
+                    <el-table-column prop="art_type" label="文章类型" align="center"></el-table-column>
+                    <el-table-column prop="art_author" label="文章作者" align="center"></el-table-column>
+                    <el-table-column prop="art_addtime" label="创建时间" align="center"></el-table-column>
+                    <el-table-column label="操作" align="center">
+                        <temlate slot-scope="scope">
+                            <el-button type="primary" size="mini" @click="check(scope.row)" title="查看">查看</el-button>
+                        </temlate>
+                    </el-table-column>
+                </el-table>
+
+                <!-- 新建弹层 -->
+                <div class="add-form">
+
+                    <el-dialog title="文章" :visible.sync="dialogFormVisible">
+                        <el-form :inline="true" ref="dataAddForm" :model="formData" :rules="rules" label-position="right" label-width="80px">
+                            <el-form-item prop="art_title">
+                                <div id="title-box">
+                                    <a id="art-title">
+                                        {{formData.art_title}}
+                                    </a>
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="文章作者:" prop="art_author">
+                                <div id="author-box">
+                                    <a>
+                                        {{formData.art_author}}
+                                    </a>
+                                </div>
+
+                            </el-form-item>
+                        </el-form>
+
+                        <el-form ref="dataAddForm" :model="formData" :rules="rules" label-position="right" label-width="80px">
+                            <el-form-item prop="art_content">
+                                <div id="art-content">
+                                    {{formData.art_content}}
+                                </div>
+                            </el-form-item>
+                            <el-form-item label="创建时间:" prop="art_addtime">
+                                <a>
+                                    {{formData.art_addtime}}
+                                </a>
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </el-main>
+</div>
+
+</body>
+
+<!-- 引入组件库 -->
+
+<script src="../js/vue.js"></script>
+
+<script src="../plugins/elementui/index.js"></script>
+
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    var app = new Vue({
+        el:'#app',
+        data:{
+            pagination:[],
+            artTable:[],
+            formData: {},
+            dialogFormVisible:false,
+        },
+
+        created(){
+            this.getAll();
+        },
+
+        methods:{
+            getAll(){
+                axios.get("/articles").then((res)=>{
+                    this.artTable = res.data.data;
+                })
+            },
+
+            check(row){
+                axios.get("/articles/" + row.art_id).then((res) => {
+                    if (res.data.code == 20041) {
+                        this.formData = res.data.data;
+                        this.dialogFormVisible = true;
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                });
+            },
+            mainPage(){
+                window.location.href="../pages/main.html"
+            }
+        }
+    })
+</script>
+
+<style>
+    #header{
+        padding: 10px;
+    }
+
+    #h_left{
+        float: left;
+    }
+
+    #h_right{
+        float: right;
+    }
+
+    #art-content{
+        background-color: #d3d4d6;
+        width: 750px;
+        height: 500px;
+    }
+
+    #title-box{
+
+    }
+
+    #author-box{
+
+    }
+
+    #art-title{
+        font-size: 20px;
+        font-weight: 700;
+    }
+</style>
+</html>

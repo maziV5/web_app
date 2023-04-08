@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test2</title>
+</head>
+
+<body>
+
+<div id="app">
+
+</div>
+
+</body>
+
+<!-- 引入组件库 -->
+
+<script src="../js/vue.js"></script>
+
+<script src="../plugins/elementui/index.js"></script>
+
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    var app = new Vue({
+        el:'#app',
+        data:{
+
+        },
+
+        methods:{
+            getCheckCode(){
+                axios.get("/checkCode").then((res) => {
+                    console.log(res);
+
+                })
+            }
+        },
+
+        mounted(){
+            this.getCheckCode();
+        }
+    })
+</script>
+</html>

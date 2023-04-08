@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <title>首页</title>
+
+    <!-- 引入样式 -->
+
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div id="app">
+    <div>
+        <el-container>
+            <el-header>
+                <div id="header">
+                    <div id="h_left">
+                        <img src="../img/Microsoft.png">
+                    </div>
+                    <div id="h_right">
+
+                        <el-button-group>
+                            <el-button type="primary" @click="login">登录</el-button>
+                            <el-button type="primary" @click="reg">注册</el-button>
+                            <el-button type="primary" @click="setting">个人中心</el-button>
+                        </el-button-group>
+                    </div>
+                    <div id="welcome" v-if="username != null && username !=''">
+                        <span>
+                            你好 {{username}}
+                        </span>
+                    </div>
+
+                </div>
+            </el-header>
+            <header>
+
+
+                    <el-menu
+                            :default-active="activeIndex2"
+                            class="el-menu-demo"
+                            mode="horizontal"
+                            @select="handleSelect"
+                            background-color="#545c64"
+                            text-color="#fff"
+                            active-text-color="#ffd04b">
+                        <el-menu-item index="1">
+                                <div>
+                                    <img src="../img/Microsoft2.png" @click="mainPage">
+                                </div>
+                        </el-menu-item>
+                        <el-menu-item index="2"><a href="../pages/article.html" target="_self">文章</a></el-menu-item>
+                    </el-menu>
+
+
+            </header>
+            <el-main>
+                <template>
+                    <div class="block">
+                        <el-carousel trigger="click" height="37vw">
+                            <el-carousel-item v-for="item in imgUrl" :key="item">
+                                <img :src="item" style="width: 100%;height: auto"/>
+                            </el-carousel-item>
+                        </el-carousel>
+                    </div>
+                </template>
+                <div id="info">
+                    <template>
+                        <el-tabs v-model="activeName" @tab-click="handleClick" stretch="true">
+                            <el-tab-pane label="企业简介" name="first">
+                                <div id="info1">
+                                    {{infoTable[0].info_content}}
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="新闻动态" name="second">
+                                <div id="info2">
+                                    {{infoTable[1].info_content}}
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="关于我们" name="third">
+                                <div id="info3">
+                                    {{infoTable[2].info_content}}
+                                </div>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </template>
+                </div>
+            </el-main>
+            <el-footer>
+                <div id="link">
+                    链接：
+                    <div style="margin-left: 20px;" v-for="item in linkTable" key="item.id">
+                        <a :href="item.link_url">{{item.link_name}}</a>
+                    </div>
+
+                </div>
+                <el-button style="position: relative;" type="primary" @click="adminLogin">管理员登陆</el-button>
+            </el-footer>
+        </el-container>
+    </div>
+</div>
+
+</body>
+
+<!-- 引入组件库 -->
+
+<script src="../js/vue.js"></script>
+
+<script src="../plugins/elementui/index.js"></script>
+
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    var app = new Vue({
+        el:'#app',
+        data:{
+            imgUrl:['../img/1.jpg','../img/2.jpg','../img/3.jpg','../img/4.jpg'],
+            infoTable:[],
+            linkTable:[],
+            username:window.sessionStorage.getItem("username"),
+        },
+
+        created(){
+            this.getInfo();
+            this.getLink();
+        },
+
+        methods:{
+            getInfo(){
+                axios.get("/infos").then((res)=>{
+                    this.infoTable = res.data.data;
+                })
+            },
+            getLink(){
+                axios.get("/links").then((res)=>{
+                    this.linkTable = res.data.data;
+                    console.log(this.linkTable);
+                })
+            },
+            login(){
+                window.location.href="../pages/login.html"
+            },
+
+            reg() {
+                window.location.href="../pages/register.html"
+            },
+
+            setting(){
+                if (this.username != null){
+                    window.location.href="../pages/userCenter.html"
+                }else {
+                    window.location.href="../pages/login.html"
+                }
+
+            },
+
+            mainPage(){
+                window.location.href="../pages/main.html"
+            },
+
+            adminLogin(){
+                window.location.href="../pages/adminLogin.html"
+            }
+        }
+    })
+</script>
+
+<style scoped>
+    #header{
+        padding: 10px;
+    }
+
+    #h_left{
+        float: left;
+    }
+
+    #h_right{
+        float: right;
+    }
+
+    #welcome{
+        float: right;
+        margin-top: 9px;
+    }
+
+    #info1,#info2,#info3{
+        text-align: center;
+    }
+
+    #link{
+        /*width: 100%;*/
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        /*justify-content: space-between;*/
+    }
+
+    .el-footer{
+        position: unset !important;
+    }
+
+    .el-button{
+        float: right;
+    }
+
+
+</style>
+</html>

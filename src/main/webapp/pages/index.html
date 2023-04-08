@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <title>后台管理系统</title>
+
+    <!-- 引入样式 -->
+
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="hold-transition">
+
+<div id="app">
+    <header>
+        <div id="header">
+            <img src="../img/Microsoft.png">
+            <span id="title">后台管理系统</span>
+            <el-button style="float: right" round @click="exit">退出</el-button>
+        </div>
+
+        <el-menu
+                :default-active="activeIndex2"
+                class="el-menu-demo"
+                mode="horizontal"
+                @select="handleSelect"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b">
+            <el-menu-item index="1"><a href="../pages/index.html" target="_self">首页</a></el-menu-item>
+            <el-menu-item index="2"><a href="../pages/userManage.html" target="_self">用户管理</a></el-menu-item>
+            <el-menu-item index="3"><a href="../pages/administrator.html" target="_self">管理员设置</a></el-menu-item>
+            <el-menu-item index="4"><a href="../pages/artManage.html" target="_self">文章管理</a></el-menu-item>
+            <el-menu-item index="5"><a href="../pages/infoManage.html" target="_self">信息管理</a></el-menu-item>
+            <el-menu-item index="6"><a href="../pages/linkManage.html" target="_self">链接管理</a></el-menu-item>
+        </el-menu>
+    </header>
+
+    <hr>
+    <div id="main">
+        <h2>欢迎使用后台管理系统</h2>
+        <span>今天是 {{time}}</span>
+    </div>
+</div>
+
+
+<!-- 引入组件库 -->
+
+<script src="../js/vue.js"></script>
+
+<script src="../plugins/elementui/index.js"></script>
+
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    var app = new Vue({
+        el:'#app',
+        data:{
+            time:new Date().toLocaleDateString(),
+        },
+        methods:{
+            exit(){
+                window.location.href="../pages/main.html"
+            }
+        }
+    })
+</script>
+
+<style>
+    #header{
+        padding: 10px;
+    }
+
+    #title{
+        font-size: 30px;
+        font-weight: 900;
+        margin-left: 5%;
+
+    }
+
+    #main{
+        padding: 10px;
+    }
+</style>
+</body>
+</html>

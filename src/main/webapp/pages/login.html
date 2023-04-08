@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <title>登录</title>
+
+    <!-- 引入样式 -->
+
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div id="login">
+
+    <div id="outerBox">
+        <div id="innerBox">
+            <div id="header">
+                <span id="title"> 登录 </span>
+            </div>
+
+            <div id="main">
+                <el-form ref="userLogin" :model="userData" :rules="rules" label-width="80px">
+                    <el-form-item label="用户名" prop="user_name">
+                        <el-input v-model="userData.user_name" placeholder="请输入用户名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password">
+                        <el-input v-model="userData.password" placeholder="请输入密码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="验证码" prop="checkCode">
+                        <el-input v-model="userData.checkCode" placeholder="验证码" style="width: 150px;float: left"></el-input>
+                        <img :src="img" @click="changeImg" style="margin-left: auto;margin-right: auto;margin-top: 5px">
+                    </el-form-item>
+
+                    <el-button type="primary" @click="login">登录</el-button>
+
+                </el-form>
+            </div>
+
+            <div id="footer">
+                <span>没有账号？ <a href="../pages/register.html">立即注册</a></span>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+</body>
+
+<!-- 引入组件库 -->
+
+<script src="../js/vue.js"></script>
+
+<script src="../plugins/elementui/index.js"></script>
+
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    var login = new Vue({
+        el:'#login',
+        data:{
+            pagination: {},
+            userData:{},
+            img:'/checkCode',
+            rules:{
+                user_name:[
+                    {required:true,message:'请输入用户名',trigger:'blur'},
+                    {min:3,max:15,message: '长度为 3 - 15',trigger: 'blur'}
+                ],
+                password:[
+                    {required:true,message:'请输入密码',trigger:'blur'},
+                    {min:6,max:15,message: '长度为 6 - 15',trigger: 'blur'}
+                ],
+                checkCode:[
+                    {required:true,message:'请输入验证码',trigger:'blur'},
+                    {message:'请输入正确的验证码',trigger:'blur',pattern:/^[a-zA-Z0-9]{4}$/}
+                ]
+            }
+        },
+
+        methods:{
+            login(){
+                this.$refs.userLogin.validate().then(() => {
+                    axios.post("/users/login",this.userData).then((res) => {
+                        if (res.data.code == 20051) {
+                            this.$message.success("登录成功");
+                            window.sessionStorage.setItem("username",res.data.data.user_name);
+                            window.location.href="../pages/main.html";
+                        }else {
+                            this.$message.error(res.data.msg);
+                        }
+                    })
+                }).catch(() => {
+                    this.$message.error("登录失败");
+                })
+            },
+
+            changeImg(){
+                var date = new Date().getTime();
+                this.img = '/checkCode?' + date;
+            }
+        }
+    })
+</script>
+
+<style>
+
+    #outerBox{
+        width:450px;
+        height: 550px;
+        position: absolute;
+        left:0;
+        top:0;
+        right:0;
+        bottom: 0;
+        margin: auto;
+        background-color: #d3d4d6;
+    }
+
+    #innerBox{
+        width: 400px;
+        height: 500px;
+        position: absolute;
+        left:0;
+        top:0;
+        right:0;
+        bottom: 0;
+        margin: auto;
+        background-color: white;
+    }
+
+    #header{
+        height: 100px;
+        background-color: #8cc5ff;
+        text-align: center;
+        line-height:100px;
+    }
+
+    #footer{
+        height: 100px;
+        background-color: #8cc5ff;
+        text-align: center;
+        line-height:100px;
+    }
+
+    #main{
+        height: 280px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    #title{
+        font-size: 30px;
+        font-weight: 600;
+    }
+
+</style>
+</html>
